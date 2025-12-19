@@ -302,6 +302,24 @@ const MenuApp = () => {
     alert("Dato copiado al portapapeles");
   };
 
+  const handleGetLocation = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const { latitude, longitude } = position.coords;
+        const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
+        setAddress(prev => {
+          const separator = prev ? ' - ' : '';
+          return `${prev}${separator}${mapsLink}`;
+        });
+      }, function (error) {
+        console.error("Error obtaining location", error);
+        alert("No se pudo obtener la ubicación. Asegúrate de dar permisos o ingresa tu dirección manualmente.");
+      });
+    } else {
+      alert("La geolocalización no está soportada en este navegador.");
+    }
+  };
+
   const handleSendOrder = () => {
     if (cart.length === 0) return;
     if (orderType === 'delivery' && !address) {
@@ -565,7 +583,22 @@ const MenuApp = () => {
                       <button onClick={() => setOrderType('delivery')} className={`flex-1 p-3 rounded-xl border-2 font-bold text-sm ${orderType === 'delivery' ? 'border-orange-500 bg-orange-50 text-orange-700' : 'text-gray-500 border-gray-200'}`}>🛵 Domicilio</button>
                     </div>
                     {orderType === 'delivery' && (
-                      <div className="mt-3"><input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Calle, número, colonia, referencia..." className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:border-orange-500" /></div>
+                      <div className="mt-3">
+                        <input 
+                          type="text" 
+                          value={address} 
+                          onChange={(e) => setAddress(e.target.value)} 
+                          placeholder="Calle, número, colonia, referencia..." 
+                          className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:border-orange-500" 
+                        />
+                        <button 
+                          onClick={handleGetLocation}
+                          className="mt-2 w-full bg-blue-50 text-blue-600 border border-blue-200 p-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors"
+                        >
+                          <MapPin className="w-4 h-4" />
+                          Agregar mi ubicación actual (Google Maps)
+                        </button>
+                      </div>
                     )}
                   </div>
 
