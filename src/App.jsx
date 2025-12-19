@@ -193,6 +193,7 @@ const MenuApp = () => {
   const [orderType, setOrderType] = useState('pickup');
   const [address, setAddress] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [isLoadingLocation, setIsLoadingLocation] = useState(false);
 
   // Paso 1: Abrir selector de ingredientes base
   const handleOpenCombo = (item) => {
@@ -303,21 +304,50 @@ const MenuApp = () => {
   };
 
   const handleGetLocation = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(function (position) {
+    if (!("geolocation" in navigator)) {
+      alert("La geolocalización no está soportada en este navegador.");
+      return;
+    }
+
+    setIsLoadingLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
         const { latitude, longitude } = position.coords;
         const mapsLink = `https://www.google.com/maps?q=${latitude},${longitude}`;
-        setAddress(prev => {
-          const separator = prev ? ' - ' : '';
+        setAddress((prev) => {
+          // Si ya hay texto, agregamos el link al final separado por un espacio
+          const separator = prev && prev.trim() !== "" ? " " : "";
+          // Evitar duplicar el link si ya está
+          if (prev.includes(mapsLink)) return prev;
           return `${prev}${separator}${mapsLink}`;
         });
-      }, function (error) {
+        setIsLoadingLocation(false);
+      },
+      (error) => {
         console.error("Error obtaining location", error);
-        alert("No se pudo obtener la ubicación. Asegúrate de dar permisos o ingresa tu dirección manualmente.");
-      });
-    } else {
-      alert("La geolocalización no está soportada en este navegador.");
-    }
+        setIsLoadingLocation(false);
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("Permiso denegado. Por favor habilita la ubicación en tu navegador para usar esta función.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("La información de ubicación no está disponible.");
+            break;
+          case error.TIMEOUT:
+            alert("Se agotó el tiempo de espera para obtener la ubicación.");
+            break;
+          default:
+            alert("Ocurrió un error desconocido al obtener la ubicación.");
+            break;
+        }
+      },
+      {
+        enableHighAccuracy: true, // Intenta usar GPS para mayor precisión
+        timeout: 10000,           // 10 segundos de timeout
+        maximumAge: 0             // No usar caché vieja
+      }
+    );
   };
 
   const handleSendOrder = () => {
@@ -593,10 +623,21 @@ const MenuApp = () => {
                         />
                         <button 
                           onClick={handleGetLocation}
-                          className="mt-2 w-full bg-blue-50 text-blue-600 border border-blue-200 p-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 hover:bg-blue-100 transition-colors"
+                          disabled={isLoadingLocation}
+                          className={`mt-2 w-full border p-2 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-colors ${
+                            isLoadingLocation 
+                              ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-wait' 
+                              : 'bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100'
+                          }`}
                         >
-                          <MapPin className="w-4 h-4" />
-                          Agregar mi ubicación actual (Google Maps)
+                          {isLoadingLocation ? (
+                            <span>Obteniendo ubicación...</span>
+                          ) : (
+                            <>
+                              <MapPin className="w-4 h-4" />
+                              Agregar mi ubicación actual (Google Maps)
+                            </>
+                          )}
                         </button>
                       </div>
                     )}
