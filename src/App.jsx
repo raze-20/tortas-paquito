@@ -17,13 +17,18 @@ const TOP_EXTRAS = [
 ];
 
 const COMMON_PREFERENCES = [
-  "Sin Cebolla", "Sin Jitomate", "Sin Chile", "Sin Aguacate", 
+  "Sin Cebolla", "Sin Jitomate", "Sin Aguacate", 
   "Sin Mayonesa", "Sin Frijoles", "Bien Dorada", "Poco Dorada"
+];
+
+const SPICY_OPTIONS = [
+  "Sin Chile", "Rajas", "Chipotle", 
+  "Rajas Aparte", "Chipotle Aparte"
 ];
 
 const BASE_INGREDIENTS = [
   "Milanesa", "Pierna", "Chuleta", "Chorizo", "Queso Blanco", 
-  "Salchicha", "Huevo", "Queso Amarillo", "Jamón", "Pastor", "Pollo", "Bistec"
+  "Salchicha", "Huevo", "Queso Amarillo", "Jamón"
 ];
 
 // --- DATA DEL MENÚ ---
@@ -451,6 +456,15 @@ const MenuApp = () => {
                     >
                       {extra}
                     </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-bold text-gray-700 mb-2 text-sm">Picante</h4>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {SPICY_OPTIONS.map((opt, idx) => (
+                    <button key={idx} onClick={() => togglePreference(opt)} className={`px-3 py-1 rounded-full text-xs border transition-all ${itemNotes.includes(opt) ? 'bg-red-50 border-red-400 text-red-700 font-bold' : 'border-gray-200 text-gray-600'}`}>{opt}</button>
                   ))}
                 </div>
               </div>
