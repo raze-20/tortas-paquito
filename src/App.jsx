@@ -357,7 +357,7 @@ const MenuApp = () => {
       return;
     }
 
-    let message = `Hola *Super Tortas Paquito*! 🌮\nQuiero realizar el siguiente pedido:\n\n`;
+    let message = `Hola *Super Tortas Paquito*! 🥖\nQuiero realizar el siguiente pedido:\n\n`;
     
     cart.forEach(item => {
       message += `▪️ ${item.qty}x ${item.name} ($${item.price * item.qty})\n`;
@@ -365,16 +365,16 @@ const MenuApp = () => {
         item.extras.forEach(ex => message += `   + ${ex.name} ($${ex.price})\n`);
       }
       if (item.notes) {
-        message += `   📝 Nota: ${item.notes}\n`;
+        message += `    Nota: ${item.notes}\n`;
       }
     });
 
-    message += `\n💰 *Total: $${cartTotal}*\n`;
+    message += `\n *Total: $${cartTotal}*\n`;
     message += `----------------------------\n`;
-    message += `🛵 *Tipo de entrega:* ${orderType === 'pickup' ? 'Pasar a Recoger' : 'A Domicilio'}\n`;
-    if (orderType === 'delivery') message += `📍 *Ubicación:* ${address}\n`;
-    message += `💳 *Método de Pago:* ${paymentMethod === 'cash' ? 'Efectivo' : 'Transferencia'}\n`;
-    if (paymentMethod === 'transfer') message += `(Envío comprobante de pago 📸)\n`;
+    message += ` *Tipo de entrega:* ${orderType === 'pickup' ? 'Pasar a Recoger' : 'A Domicilio'}\n`;
+    if (orderType === 'delivery') message += ` *Ubicación:* ${address}\n`;
+    message += ` *Método de Pago:* ${paymentMethod === 'cash' ? 'Efectivo' : 'Transferencia'}\n`;
+    if (paymentMethod === 'transfer') message += `(Envío comprobante de pago)\n`;
 
     window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank');
   };
