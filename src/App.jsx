@@ -357,10 +357,10 @@ const MenuApp = () => {
       return;
     }
 
-    let message = `Hola *Super Tortas Paquito*! 🥖\nQuiero realizar el siguiente pedido:\n\n`;
+    let message = `Hola *Super Tortas Paquito*! \nQuiero realizar el siguiente pedido:\n\n`;
     
     cart.forEach(item => {
-      message += `▪️ ${item.qty}x ${item.name} ($${item.price * item.qty})\n`;
+      message += `• ${item.qty}x ${item.name} ($${item.price * item.qty})\n`;
       if (item.extras && item.extras.length > 0) {
         item.extras.forEach(ex => message += `   + ${ex.name} ($${ex.price})\n`);
       }
