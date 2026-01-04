@@ -28,7 +28,7 @@ const SPICY_OPTIONS = [
 
 const BASE_INGREDIENTS = [
   "Milanesa", "Pierna", "Chuleta", "Chorizo", "Queso Blanco", 
-  "Salchicha", "Huevo", "Queso Amarillo", "Jamón"
+  "Salchicha", "Huevo", "Queso Amarillo", "Jamón", "Quesillo"
 ];
 
 // --- DATA DEL MENÚ ---
