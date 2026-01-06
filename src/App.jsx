@@ -171,8 +171,8 @@ const menuData = [
 ];
 
 const DRINKS_MENU = [
-  { name: "Coca Cola", price: 25 },
-  { name: "Jarritos", price: 20 },
+  { name: "Coca Cola", price: 30 },
+  { name: "Jarritos", price: 25 },
 ];
 
 const MenuApp = () => {
